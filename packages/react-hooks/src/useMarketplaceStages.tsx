@@ -12,12 +12,34 @@ import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import envConfig from '@polkadot/apps-config/envConfig';
 import { StatusContext } from '@polkadot/react-components/Status';
 import { useApi, useKusamaApi, useNftContract, useToken } from '@polkadot/react-hooks';
+import { subToEth } from '@polkadot/react-hooks/utils';
 
 import marketplaceStateMachine from './stateMachine';
 
 const { commission, escrowAddress, kusamaDecimals, maxGas, quoteId } = envConfig;
 
 type UserActionType = 'ASK_PRICE_FAIL' | 'BUY' | 'CANCEL' | 'SELL' | 'REVERT_UNUSED_MONEY' | 'UPDATE_TOKEN_STATE' | 'OFFER_TRANSACTION_FAIL' | 'SUBMIT_OFFER' | 'OFFER_TRANSACTION_SUCCESS';
+
+// wss://ws-opal.unique.network - web socket
+// Rpc-opal.unique.network - rpc
+
+/*
+Westend - это тестовая сеть парити, младший брат кусама.
+Иерархия следующая polkadot старше кусамы - обе сети с реальными деньгами, советами, демократиями и общей движухой.
+Вестенд валюта ничего не стоит и там sudo.
+Рококо самая низкая в иерархии сеть, ее ломают безжалостно
+Opal - это брендинг наш для тестнет,  на кусама quartz, unique для выхода на polkadot
+
+Эскроу получает токен
+Эскроу регистрирует токен и адрес продавца в матчере
+Продавец вызывает матчер для установки цены
+---- в этот момент фактически создается оффер ----
+Эскроу получает KSM
+Эскроу регистрирует KSM и адрес покупателя в матчере
+Покупатель вызывает матчер для покупки
+---- в этот момент оффер перестает существовать ----
+Эскроу раздает покупателю NFT, продавцу KSM
+ */
 
 export interface MarketplaceStagesInterface {
   buyFee: BN | undefined;
@@ -146,7 +168,7 @@ export const useMarketplaceStages = (account: string, collectionInfo: NftCollect
 
   /** user actions **/
   const sell = useCallback(() => {
-    // check balance to have enough fee
+    // transfer nft to eth address - subToEth(seller.address)
     if (collectionInfo) {
       queueTransaction(
         api.tx.nft
@@ -438,6 +460,10 @@ export const useMarketplaceStages = (account: string, collectionInfo: NftCollect
   useEffect(() => {
     void updateTokenInfo();
   }, [updateTokenInfo]);
+
+  useEffect(() => {
+    void subToEth(account);
+  }, [account]);
 
   return {
     buyFee,
