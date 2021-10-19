@@ -225,6 +225,15 @@ function Apps ({ className = '' }: Props): React.ReactElement<Props> {
                             setOpenPanel={setOpenPanel}
                           />
                         )}
+
+                          <div className='info-banner'>
+                            <div className='error-message-info'>
+                              <div>
+                                <p> UNIQUE.NETWORK NFT marketplace with only 2% commission!  </p>
+                              </div>
+                            </div>
+                          </div>
+
                         { (openPanel !== 'accounts') && (
                           <Suspense fallback=''>
                             <main className={`app-main ${openPanel || ''} ${noAccounts ? 'no-accounts' : ''} ${!isPageFound ? 'page-no-found' : ''}`}>

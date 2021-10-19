@@ -312,6 +312,32 @@
   }
 }
 
+.info-banner {
+  display: flex;
+  background: #5C2FEE;
+  color: #fff;
+  font-family: Roboto;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 22px;
+
+  span {
+    color: #bcadee;
+  }
+  .error-message-info {
+    margin-left: 10px;
+  }
+  .error-info-svg {
+    display: flex;
+    margin-left: 10px;
+  }
+  p {
+    margin: 3px !important;
+  }
+}
+
+
 .crateAccountBtn {
   background: #ffffff;
   text-transform: lowercase;
