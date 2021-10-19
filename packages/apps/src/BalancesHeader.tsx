@@ -8,11 +8,11 @@ import React, { memo, useCallback, useEffect, useRef, useState } from 'react';
 
 import menuArrow from '@polkadot/apps/images/menu-arrow.svg';
 import envConfig from '@polkadot/apps-config/envConfig';
-import PopupMenu from '@polkadot/react-components/PopupMenu';
-import { useBalances, useNftContract } from '@polkadot/react-hooks';
+import { PopupMenu } from '@polkadot/react-components';
+import { useBalances } from '@polkadot/react-hooks';
 import { formatKsmBalance, formatStrBalance } from '@polkadot/react-hooks/useKusamaApi';
 
-const { commission } = envConfig;
+const { commission, minPrice } = envConfig;
 
 interface Props {
   account?: string,
@@ -23,7 +23,15 @@ interface Props {
 function BalancesHeader (props: Props): React.ReactElement<{ account?: string }> {
   const { account, isMobileMenu, setOpenPanel } = props;
   const { freeBalance, freeKusamaBalance } = useBalances(account);
-  const { deposited } = useNftContract(account || '');
+  const [deposited, setDeposited] = useState< BN >();
+
+  const getDeposited = useCallback(() => {
+    setDeposited(new BN(Number(localStorage.getItem('deposit'))));
+  }, []);
+
+  useEffect(() => {
+    getDeposited();
+  }, [getDeposited, freeKusamaBalance]);
 
   const [isPopupActive, setIsPopupActive] = useState<boolean>(false);
 
@@ -66,14 +74,16 @@ function BalancesHeader (props: Props): React.ReactElement<{ account?: string }>
       className='app-balances'
       ref = {headerRef}
     >
-      <div className='app-balances-items'
-        onClick={onClick}>
+      <div
+        className='app-balances-items'
+        onClick={onClick}
+      >
         <div className='app-balances-items-item'>
           {formatStrBalance(15, freeBalance)}
           <span className='unit'>UNQ</span>
         </div>
         <div className='app-balances-items-item'>
-          {deposited &&
+          {deposited && +formatKsmBalance(deposited) > minPrice &&
           Number(formatKsmBalance(freeKusamaBalance)) &&
           Number(formatKsmBalance(new BN(deposited).add(getFee(deposited))))
             ? getAllKSMBalance()
