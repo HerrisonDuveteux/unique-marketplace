@@ -14,7 +14,7 @@ import { BlockAuthors, Events } from '@polkadot/react-query';
 import { settings } from '@polkadot/ui-settings';
 
 import Apps from './Apps';
-import { Themes, uniqueTheme } from './themes';
+import { Themes, fluffyTheme } from './themes';
 import WindowDimensions from './WindowDimensions';
 
 interface Props {
@@ -27,9 +27,9 @@ function createTheme ({ uiTheme }: { uiTheme: string }): ThemeDef {
   });
 
   document && document.documentElement &&
-    document.documentElement.setAttribute('data-theme', validTheme ? validTheme.theme : 'Unique');
+    document.documentElement.setAttribute('data-theme', validTheme ? validTheme.theme : 'Fluffy');
 
-  return validTheme || uniqueTheme;
+  return validTheme || fluffyTheme;
 }
 
 function Root ({ store }: Props): React.ReactElement<Props> {
