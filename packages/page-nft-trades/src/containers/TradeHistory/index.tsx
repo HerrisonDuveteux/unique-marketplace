@@ -13,17 +13,17 @@ import { useCollections } from '@polkadot/react-hooks';
 
 const { kusamaDecimals, uniqueCollectionIds } = envConfig;
 
-function TradeHistory ({ account }: { account?: string }): React.ReactElement {
+function TradeHistory({ account }: { account?: string }): React.ReactElement {
   const { getTrades, myTrades, trades } = useCollections();
   const [tradesList, setTradesList] = useState<TradeType[]>();
   const history = useHistory();
 
   const fetchTrades = useCallback(() => {
     getTrades({ account, collectionIds: uniqueCollectionIds, page: 1, pageSize: 100 });
-  }, [account, getTrades]) ;
+  }, [account, getTrades]);
   //getTrades.sort((a, b) => (a. || 0) - (b.account.meta.whenCreated || 0))
   //TradeHistory.sort((a,b)=>(b.tradeDate-a.tradeDate));
-  
+
   const headerRef = useRef([
     ['Token', 'start'],
     ['Collection', 'start'],
@@ -37,14 +37,27 @@ function TradeHistory ({ account }: { account?: string }): React.ReactElement {
     fetchTrades();
   }, [fetchTrades]);
 
+  function sortDataByDates (trades: any) {
+    trades.sort(function (a, b) {
+      var dateA = new Date(a.creationDate).getTime();
+      var dateB = new Date(b.creationDate).getTime();
+      return dateA < dateB ? 1 : -1; // ? -1 : 1 for ascending/increasing order
+    });
+  };
+
   useEffect(() => {
     if (account) {
-      setTradesList(myTrades);
+      let arr;
+      arr = myTrades && sortDataByDates(myTrades);
+      setTradesList(arr);
     } else {
-      setTradesList(trades);
+      let arr;
+      arr = trades && sortDataByDates(trades);
+      setTradesList(arr);
     }
   }, [account, myTrades, trades]);
 
+  
   const openDetailedInformationModal = useCallback((collectionId: string | number, tokenId: string | number) => {
     history.push(`/wallet/token-details?collectionId=${collectionId}&tokenId=${tokenId}`);
   }, [history]);
@@ -58,7 +71,7 @@ function TradeHistory ({ account }: { account?: string }): React.ReactElement {
         empty={'No trades found'}
         header={headerRef.current}
       >
-        { tradesList && tradesList.map((trade: TradeType) => (
+        {tradesList && tradesList.map((trade: TradeType) => (
           <tr
             className='trades-row'
             key={`${trade.collectionId}-${trade.tokenId}-${trade.buyer || ''}-${Math.random() * 100}`}
@@ -88,7 +101,7 @@ function TradeHistory ({ account }: { account?: string }): React.ReactElement {
       </ListComponent>
     </div>
   )
-  ;
+    ;
 }
 
 export default React.memo(TradeHistory);
