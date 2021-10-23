@@ -20,8 +20,10 @@ function TradeHistory ({ account }: { account?: string }): React.ReactElement {
 
   const fetchTrades = useCallback(() => {
     getTrades({ account, collectionIds: uniqueCollectionIds, page: 1, pageSize: 100 });
-  }, [account, getTrades]);
-
+  }, [account, getTrades]) ;
+  //getTrades.sort((a, b) => (a. || 0) - (b.account.meta.whenCreated || 0))
+  //TradeHistory.sort((a,b)=>(b.tradeDate-a.tradeDate));
+  
   const headerRef = useRef([
     ['Token', 'start'],
     ['Collection', 'start'],
@@ -85,7 +87,8 @@ function TradeHistory ({ account }: { account?: string }): React.ReactElement {
         ))}
       </ListComponent>
     </div>
-  );
+  )
+  ;
 }
 
 export default React.memo(TradeHistory);
