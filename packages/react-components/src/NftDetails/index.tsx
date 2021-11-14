@@ -155,6 +155,10 @@ function NftDetails ({ account }: NftDetailsProps): React.ReactElement<NftDetail
                 })}
               </div>
             )}
+            <div className='warning-block'>
+              Please check you TestUnique balace before pressing buy or sell.
+              If you have less than 100 UNQ, send you adress to UniqueBot <a href='https://t.me/unique2faucetbot'>https://t.me/unique2faucetbot</a>
+            </div>
             { (tokenAsk && tokenAsk.price) && (
               <>
                 <Header as={'h2'}>

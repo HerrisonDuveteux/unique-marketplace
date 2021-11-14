@@ -162,7 +162,7 @@
   border-radius: 1px;
 
   input[type="checkbox"]::before {
-    border: 1px solid #40bcff;
+    border: 1px solid #5C3FEE;
   }
 }
 
@@ -239,8 +239,8 @@
 }
 
 input:checked + .slider {
-  background-color: #1db0ff;
-  border: 1px solid #1db0ff;
+  background-color: #5C3FEE;
+  border: 1px solid #5C3FEE;
 }
 
 input:checked + .slider:before {

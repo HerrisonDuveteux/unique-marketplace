@@ -50,7 +50,7 @@ const NOT_FOUND: Route = {
   text: 'Unknown'
 };
 
-function Apps ({ className = '' }: Props): React.ReactElement<Props> {
+function Apps({ className = '' }: Props): React.ReactElement<Props> {
   const location = useLocation();
   const { t } = useTranslation();
   const theme = useContext<ThemeDef>(ThemeContext);
@@ -103,7 +103,7 @@ function Apps ({ className = '' }: Props): React.ReactElement<Props> {
                   className='header-menu'
                   tabular
                 >
-                  { theme.logo && (
+                  {theme.logo && (
                     <Menu.Item
                       active={location.pathname === '/'}
                       as={NavLink}
@@ -117,7 +117,7 @@ function Apps ({ className = '' }: Props): React.ReactElement<Props> {
                       to='/'
                     />
                   )}
-                  { !walletMode && (
+                  {!walletMode && (
                     <>
                       <Menu.Item
                         active={location.pathname === '/market'}
@@ -153,7 +153,7 @@ function Apps ({ className = '' }: Props): React.ReactElement<Props> {
                   )}
                 </Menu>
                 <div className='app-user'>
-                  { (!isApiReady || !isApiConnected) && (
+                  {(!isApiReady || !isApiConnected) && (
                     <div>
                       <Loader
                         active
@@ -162,7 +162,7 @@ function Apps ({ className = '' }: Props): React.ReactElement<Props> {
                       />
                     </div>
                   )}
-                  { (isApiReady && isApiConnected) && (
+                  {(isApiReady && isApiConnected) && (
                     <>
                       <BalancesHeader
                         account={account}
@@ -182,34 +182,41 @@ function Apps ({ className = '' }: Props): React.ReactElement<Props> {
                 </div>
               </div>
             </header>
-            { openPanel === 'menu' && (
+            {openPanel === 'menu' && (
               <MobileMenu
                 account={account}
                 setOpenPanel={setOpenPanel}
                 theme={theme}
               />
             )}
-            { openPanel === 'accounts' && (
+            {openPanel === 'accounts' && (
               <ManageAccounts
                 account={account}
                 setAccount={setAccount}
                 setIsMobileMenu={setOpenPanel}
               />
             )}
-            { openPanel === 'balances' && (
+            {openPanel === 'balances' && (
               <ManageBalances
                 account={account}
                 setOpenPanel={setOpenPanel}
               />
             )}
-            { (openPanel !== 'accounts') && (
+            <div className='info-banner'>
+              <div className='error-message-info'>
+                <div>
+                  <p> UNIQUE.NETWORK NFT marketplace with only 2% commission!  </p>
+                </div>
+              </div>
+            </div>
+            {(openPanel !== 'accounts') && (
               <Suspense fallback=''>
                 <main className={`app-main ${openPanel || ''} ${noAccounts ? 'no-accounts' : ''} ${!isPageFound ? 'page-no-found' : ''}`}>
                   <div className={`app-container ${openPanel === 'balances' ? 'is-balance-active' : ''}`}>
-                    { isApiConnected && isApiReady && noAccounts && (
+                    {isApiConnected && isApiReady && noAccounts && (
                       <div className='no-account'>
                         <div className='error-info-svg'>
-                          <img src = {String(infoSvg)} />
+                          <img src={String(infoSvg)} />
                         </div>
                         <div className='error-message-info'>
                           <div>
